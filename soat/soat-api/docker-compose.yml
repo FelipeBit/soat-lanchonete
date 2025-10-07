@@ -1,0 +1,44 @@
+services:
+  api:
+    build: .
+    command: npm run start:dev
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=dbadmin
+      - DB_PASSWORD=IeYSvu?aKWkq|E:RrTcimNW(U)w4
+      - DB_DATABASE=appdb
+      - PORT=3000
+      - NODE_ENV=development
+      - MERCADO_PAGO_ACCESS_TOKEN=TEST-1234567890-abcdef-1234567890abcdef-12345678
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - fastfood-network
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_USER=dbadmin
+      - MYSQL_PASSWORD=IeYSvu?aKWkq|E:RrTcimNW(U)w4
+      - MYSQL_DATABASE=appdb
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - fastfood-network
+    command: --default-authentication-plugin=mysql_native_password
+
+volumes:
+  mysql_data:
+
+networks:
+  fastfood-network:
+    driver: bridge 

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soat-api-config
+  namespace: soat-api
+data:
+  # Database Configuration
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_DATABASE: "fastfood_db"
+  
+  # Application Configuration
+  API_BASE_URL: "https://api.soat.com"
+  NODE_ENV: "production"
+  
+  # Mercado Pago Configuration
+  MERCADO_PAGO_BASE_URL: "https://api.mercadopago.com"
+  
+  # Logging Configuration
+  LOG_LEVEL: "info"
+  
+  # Health Check Configuration
+  HEALTH_CHECK_PATH: "/health"
+  READINESS_PROBE_PATH: "/ready" 

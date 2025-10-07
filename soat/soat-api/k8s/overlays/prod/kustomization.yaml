@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: soat-api-prod
+
+resources:
+- ../../base
+
+patchesStrategicMerge:
+- deployment-patch.yaml
+- hpa-patch.yaml
+- ingress-patch.yaml
+
+configMapGenerator:
+- name: soat-api-config
+  behavior: create
+  literals:
+  - NODE_ENV=production
+  - LOG_LEVEL=warn
+  - API_BASE_URL=https://api.soat.com
+
+secretGenerator:
+- name: soat-api-secrets
+  behavior: create
+  literals:
+  - DB_PASSWORD=prod-secure-password-123
+  - MERCADO_PAGO_ACCESS_TOKEN=PROD-ACCESS-TOKEN-456
+
+commonLabels:
+  environment: production
+  tier: production
+
+images:
+- name: soat-api
+  newTag: v1.0.0 

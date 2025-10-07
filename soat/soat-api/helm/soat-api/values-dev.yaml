@@ -1,0 +1,58 @@
+# Development environment values for soat-api
+
+# Override default values for development
+replicas: 1
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+app:
+  nodeEnv: development
+  logLevel: debug
+  apiBaseUrl: "https://dev-api.soat.com"
+
+database:
+  host: postgres-dev
+  name: fastfood_dev
+  password: dev-password
+
+mercadoPago:
+  accessToken: "TEST-DEV-TOKEN"
+
+ingress:
+  hosts:
+    - host: dev-api.soat.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: soat-api-dev-tls
+      hosts:
+        - dev-api.soat.com
+  annotations:
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+
+monitoring:
+  enabled: false
+
+logging:
+  enabled: true
+  fluentd:
+    enabled: false
+
+backup:
+  enabled: false 

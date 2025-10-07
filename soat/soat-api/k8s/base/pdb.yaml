@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: soat-api-pdb
+  namespace: soat-api
+  labels:
+    app: soat-api
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: soat-api 

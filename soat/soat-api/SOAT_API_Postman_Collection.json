@@ -1,0 +1,865 @@
+{
+  "info": {
+    "name": "SOAT API - Fast Food Autoatendimento",
+    "description": "Collection completa da API de autoatendimento de fast food com todos os endpoints e exemplos de requisição",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "soat-api-collection",
+    "version": "2.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "swagger_url",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔗 Swagger Documentation",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{swagger_url}}",
+          "host": ["{{swagger_url}}"]
+        },
+        "description": "Acesse a documentação interativa da API via Swagger UI"
+      }
+    },
+    {
+      "name": "📋 Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        },
+        "description": "Verifica se a API está funcionando"
+      }
+    },
+    {
+      "name": "👥 Customer Management",
+      "item": [
+        {
+          "name": "Criar Cliente com Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@email.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/customers/email",
+              "host": ["{{base_url}}"],
+              "path": ["customers", "email"]
+            },
+            "description": "Cria um novo cliente usando email e nome"
+          }
+        },
+        {
+          "name": "Criar Cliente com CPF",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Maria Santos\",\n  \"cpf\": \"12345678901\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/customers/cpf",
+              "host": ["{{base_url}}"],
+              "path": ["customers", "cpf"]
+            },
+            "description": "Cria um novo cliente usando CPF e nome"
+          }
+        },
+        {
+          "name": "Buscar Cliente por Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers/email/joao.silva@email.com",
+              "host": ["{{base_url}}"],
+              "path": ["customers", "email", "joao.silva@email.com"]
+            },
+            "description": "Busca um cliente pelo email"
+          }
+        },
+        {
+          "name": "Buscar Cliente por CPF",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers/cpf/12345678901",
+              "host": ["{{base_url}}"],
+              "path": ["customers", "cpf", "12345678901"]
+            },
+            "description": "Busca um cliente pelo CPF"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🍔 Product Management",
+      "item": [
+        {
+          "name": "Criar Produto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"X-Burger\",\n  \"description\": \"Hambúrguer artesanal com queijo, alface e tomate\",\n  \"price\": 25.90,\n  \"category\": \"BURGER\",\n  \"imageUrl\": \"https://example.com/x-burger.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": ["{{base_url}}"],
+              "path": ["products"]
+            },
+            "description": "Cria um novo produto no catálogo"
+          }
+        },
+        {
+          "name": "Listar Todos os Produtos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": ["{{base_url}}"],
+              "path": ["products"]
+            },
+            "description": "Lista todos os produtos disponíveis"
+          }
+        },
+        {
+          "name": "Buscar Produto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{product_id}}"]
+            },
+            "description": "Busca um produto específico pelo ID"
+          }
+        },
+        {
+          "name": "Listar Produtos por Categoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/category/BURGER",
+              "host": ["{{base_url}}"],
+              "path": ["products", "category", "BURGER"]
+            },
+            "description": "Lista produtos de uma categoria específica"
+          }
+        },
+        {
+          "name": "Atualizar Produto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"X-Burger Deluxe\",\n  \"description\": \"Hambúrguer artesanal premium com queijo, bacon e molho especial\",\n  \"price\": 32.90,\n  \"category\": \"BURGER\",\n  \"imageUrl\": \"https://example.com/x-burger-deluxe.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{product_id}}"]
+            },
+            "description": "Atualiza um produto existente"
+          }
+        },
+        {
+          "name": "Deletar Produto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{product_id}}"]
+            },
+            "description": "Remove um produto do catálogo"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛒 Order Management",
+      "item": [
+        {
+          "name": "Fazer Checkout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customer_id}}\",\n  \"items\": [\n    {\n      \"productId\": \"{{product_id}}\",\n      \"quantity\": 2\n    },\n    {\n      \"productId\": \"{{product_id_2}}\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/checkout",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "checkout"]
+            },
+            "description": "Processa o checkout de um pedido com múltiplos itens (NÃO gera QR Code automaticamente)"
+          }
+        },
+        {
+          "name": "Listar Todos os Pedidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders",
+              "host": ["{{base_url}}"],
+              "path": ["orders"]
+            },
+            "description": "Lista todos os pedidos"
+          }
+        },
+        {
+          "name": "Buscar Pedido por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_id}}"]
+            },
+            "description": "Busca um pedido específico pelo ID"
+          }
+        },
+        {
+          "name": "Listar Pedidos por Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/status/RECEIVED",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "status", "RECEIVED"]
+            },
+            "description": "Lista pedidos com um status específico"
+          }
+        },
+        {
+          "name": "Listar Pedidos por Cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/customer/{{customer_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "customer", "{{customer_id}}"]
+            },
+            "description": "Lista todos os pedidos de um cliente específico"
+          }
+        },
+        {
+          "name": "Listar Pedidos Ativos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/active",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "active"]
+            },
+            "description": "Lista pedidos que ainda não foram finalizados"
+          }
+        },
+        {
+          "name": "Listar Fila de Pedidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/queue",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "queue"]
+            },
+            "description": "Lista todos os pedidos na fila de preparação"
+          }
+        },
+        {
+          "name": "Atualizar Status do Pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PREPARING\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_id}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_id}}", "status"]
+            },
+            "description": "Atualiza o status de um pedido (RECEIVED → PREPARING → READY → DELIVERED)"
+          }
+        },
+        {
+          "name": "Verificar Status do Pagamento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_id}}/payment-status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_id}}", "payment-status"]
+            },
+            "description": "Verifica o status do pagamento de um pedido"
+          }
+        },
+        {
+          "name": "Atualizar Status do Pagamento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentStatus\": \"PAID\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_id}}/payment-status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_id}}", "payment-status"]
+            },
+            "description": "Atualiza o status do pagamento de um pedido"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Order Queue",
+      "item": [
+        {
+          "name": "Listar Fila de Pedidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/order-queue",
+              "host": ["{{base_url}}"],
+              "path": ["order-queue"]
+            },
+            "description": "Lista todos os pedidos na fila de preparação"
+          }
+        }
+      ]
+    },
+    {
+      "name": "💳 Payment Management (Real)",
+      "item": [
+        {
+          "name": "Gerar QR Code para Pagamento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{order_id}}\",\n  \"totalAmount\": 51.80,\n  \"description\": \"Pedido #{{order_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/qr-code",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "qr-code"]
+            },
+            "description": "Gera um QR Code para pagamento via Mercado Pago (produção)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎭 Mock Payment Management",
+      "item": [
+        {
+          "name": "Gerar QR Code Mockado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{order_id}}\",\n  \"description\": \"Pedido #{{order_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/mock-payments/qr-code",
+              "host": ["{{base_url}}"],
+              "path": ["mock-payments", "qr-code"]
+            },
+            "description": "Gera um QR Code mockado para desenvolvimento e testes"
+          }
+        },
+        {
+          "name": "Simular Aprovação de Pagamento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/mock-payments/simulate-approval/{{payment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["mock-payments", "simulate-approval", "{{payment_id}}"]
+            },
+            "description": "Simula a aprovação de um pagamento mockado"
+          }
+        },
+        {
+          "name": "Simular Rejeição de Pagamento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/mock-payments/simulate-rejection/{{payment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["mock-payments", "simulate-rejection", "{{payment_id}}"]
+            },
+            "description": "Simula a rejeição de um pagamento mockado"
+          }
+        },
+        {
+          "name": "Simular Cancelamento de Pagamento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/mock-payments/simulate-cancellation/{{payment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["mock-payments", "simulate-cancellation", "{{payment_id}}"]
+            },
+            "description": "Simula o cancelamento de um pagamento mockado"
+          }
+        },
+        {
+          "name": "Verificar Status do Pagamento Mockado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/mock-payments/status/{{payment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["mock-payments", "status", "{{payment_id}}"]
+            },
+            "description": "Verifica o status de um pagamento mockado"
+          }
+        },
+        {
+          "name": "Listar Pagamentos Pendentes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/mock-payments/pending",
+              "host": ["{{base_url}}"],
+              "path": ["mock-payments", "pending"]
+            },
+            "description": "Lista todos os pagamentos mockados pendentes"
+          }
+        },
+        {
+          "name": "Limpar Pagamentos Antigos",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/mock-payments/clear-old-payments",
+              "host": ["{{base_url}}"],
+              "path": ["mock-payments", "clear-old-payments"]
+            },
+            "description": "Remove pagamentos mockados antigos (mais de 24h)"
+          }
+        },
+        {
+          "name": "Webhook Mockado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"payment.created\",\n  \"api_version\": \"v1\",\n  \"data\": {\n    \"id\": \"{{payment_id}}\"\n  },\n  \"date_created\": \"2024-01-01T12:00:00.000-04:00\",\n  \"live_mode\": false,\n  \"type\": \"payment\",\n  \"user_id\": \"123456789\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/mock-payments/webhook",
+              "host": ["{{base_url}}"],
+              "path": ["mock-payments", "webhook"]
+            },
+            "description": "Webhook mockado para simular notificações de pagamento"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔗 Webhooks",
+      "item": [
+        {
+          "name": "Webhook de Pagamento (Mercado Pago)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Signature",
+                "value": "sha256=abc123..."
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"payment.created\",\n  \"api_version\": \"v1\",\n  \"data\": {\n    \"id\": \"1234567890\"\n  },\n  \"date_created\": \"2024-01-01T12:00:00.000-04:00\",\n  \"live_mode\": false,\n  \"type\": \"payment\",\n  \"user_id\": \"123456789\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/webhooks/payment",
+              "host": ["{{base_url}}"],
+              "path": ["webhooks", "payment"]
+            },
+            "description": "Webhook para receber notificações de pagamento do Mercado Pago"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🧪 Test Scenarios",
+      "item": [
+        {
+          "name": "Cenário Completo: Pedido com Pagamento Mockado",
+          "item": [
+            {
+              "name": "1. Verificar Health",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/health",
+                  "host": ["{{base_url}}"],
+                  "path": ["health"]
+                },
+                "description": "1. Verificar se a API está funcionando"
+              }
+            },
+            {
+              "name": "2. Criar Cliente",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Teste Usuário\",\n  \"email\": \"teste@exemplo.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/customers/email",
+                  "host": ["{{base_url}}"],
+                  "path": ["customers", "email"]
+                },
+                "description": "2. Criar um cliente para o teste"
+              }
+            },
+            {
+              "name": "3. Criar Produto",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"X-Teste\",\n  \"description\": \"Produto para teste\",\n  \"price\": 15.90,\n  \"category\": \"BURGER\",\n  \"imageUrl\": \"https://exemplo.com/teste.jpg\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/products",
+                  "host": ["{{base_url}}"],
+                  "path": ["products"]
+                },
+                "description": "3. Criar um produto para o teste"
+              }
+            },
+            {
+              "name": "4. Fazer Checkout",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"{{customer_id}}\",\n  \"items\": [\n    {\n      \"productId\": \"{{product_id}}\",\n      \"quantity\": 1\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/orders/checkout",
+                  "host": ["{{base_url}}"],
+                  "path": ["orders", "checkout"]
+                },
+                "description": "4. Fazer checkout do pedido (cria pedido com status PENDING)"
+              }
+            },
+            {
+              "name": "5. Gerar QR Code Mockado",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderId\": \"{{order_id}}\",\n  \"description\": \"Pedido de teste\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/mock-payments/qr-code",
+                  "host": ["{{base_url}}"],
+                  "path": ["mock-payments", "qr-code"]
+                },
+                "description": "5. Gerar QR Code mockado para o pedido"
+              }
+            },
+            {
+              "name": "6. Simular Aprovação",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/mock-payments/simulate-approval/{{payment_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["mock-payments", "simulate-approval", "{{payment_id}}"]
+                },
+                "description": "6. Simular aprovação do pagamento"
+              }
+            },
+            {
+              "name": "7. Verificar Status do Pagamento",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/orders/{{order_id}}/payment-status",
+                  "host": ["{{base_url}}"],
+                  "path": ["orders", "{{order_id}}", "payment-status"]
+                },
+                "description": "7. Verificar se o status do pagamento foi atualizado"
+              }
+            },
+            {
+              "name": "8. Verificar Fila",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/order-queue",
+                  "host": ["{{base_url}}"],
+                  "path": ["order-queue"]
+                },
+                "description": "8. Verificar se o pedido foi para a fila"
+              }
+            },
+            {
+              "name": "9. Atualizar Status",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"PREPARING\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/orders/{{order_id}}/status",
+                  "host": ["{{base_url}}"],
+                  "path": ["orders", "{{order_id}}", "status"]
+                },
+                "description": "9. Atualizar status do pedido para 'Preparando'"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cenário: Pagamento Rejeitado",
+          "item": [
+            {
+              "name": "1. Gerar QR Code",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderId\": \"{{order_id}}\",\n  \"description\": \"Pedido para rejeição\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/mock-payments/qr-code",
+                  "host": ["{{base_url}}"],
+                  "path": ["mock-payments", "qr-code"]
+                },
+                "description": "1. Gerar QR Code para o pedido"
+              }
+            },
+            {
+              "name": "2. Simular Rejeição",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/mock-payments/simulate-rejection/{{payment_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["mock-payments", "simulate-rejection", "{{payment_id}}"]
+                },
+                "description": "2. Simular rejeição do pagamento"
+              }
+            },
+            {
+              "name": "3. Verificar Status",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/orders/{{order_id}}/payment-status",
+                  "host": ["{{base_url}}"],
+                  "path": ["orders", "{{order_id}}", "payment-status"]
+                },
+                "description": "3. Verificar status do pagamento rejeitado"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Log da requisição",
+          "console.log('Fazendo requisição para: ' + pm.request.url);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Testes básicos",
+          "pm.test('Status code is 200 or 201', function () {",
+          "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+          "});",
+          "",
+          "pm.test('Response time is less than 2000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+          "});",
+          "",
+          "// Salvar IDs para uso posterior",
+          "if (pm.response.code === 200 || pm.response.code === 201) {",
+          "    const response = pm.response.json();",
+          "    if (response.id) {",
+          "        if (pm.request.url.path.includes('customers')) {",
+          "            pm.collectionVariables.set('customer_id', response.id);",
+          "        } else if (pm.request.url.path.includes('products')) {",
+          "            pm.collectionVariables.set('product_id', response.id);",
+          "        } else if (pm.request.url.path.includes('orders')) {",
+          "            pm.collectionVariables.set('order_id', response.id);",
+          "        }",
+          "    }",
+          "    // Extrair payment_id do QR Code",
+          "    if (response.qrData && response.qrData.includes('mock_qr_data_')) {",
+          "        const paymentId = response.qrData.split('_').pop();",
+          "        pm.collectionVariables.set('payment_id', paymentId);",
+          "    }",
+          "    // Extrair payment_id da resposta de simulação",
+          "    if (response.paymentId) {",
+          "        pm.collectionVariables.set('payment_id', response.paymentId);",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ]
+} 

@@ -1,0 +1,23 @@
+apiVersion: v2
+name: soat-api
+description: A Helm chart for SOAT API - Fast Food Order Management System
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - fast-food
+  - order-management
+  - api
+  - nestjs
+  - postgresql
+  - mercado-pago
+home: https://github.com/your-org/soat-api
+sources:
+  - https://github.com/your-org/soat-api
+maintainers:
+  - name: SOAT Team
+    email: team@soat.com
+icon: https://via.placeholder.com/150x150/0066cc/ffffff?text=SOAT
+annotations:
+  category: Application
+  licenses: MIT 

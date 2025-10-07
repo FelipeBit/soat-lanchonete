@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soat-api-config
+  namespace: soat-api-dev
+data:
+  NODE_ENV: "development"
+  LOG_LEVEL: "debug"
+  API_BASE_URL: "https://dev-api.soat.com" 

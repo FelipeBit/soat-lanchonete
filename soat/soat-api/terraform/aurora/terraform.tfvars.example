@@ -1,0 +1,54 @@
+# --- REQUIRED ---
+vpc_id             = "vpc-xxxxxxxx"
+private_subnet_ids = [
+  "subnet-aaaaaaaa",
+  "subnet-bbbbbbbb",
+]
+
+# Allow access from your app VPC CIDRs or jumpbox IPs
+allowed_cidr_blocks = [
+  # "10.0.0.0/16",
+  # "x.x.x.x/32", # your public IP
+]
+
+# Alternatively (or additionally) allow specific SGs
+allowed_security_group_ids = [
+  # "sg-1234567890abcdef0"
+]
+
+# Public access options (for study/dev only)
+allow_public_ingress = false   # true opens port to 0.0.0.0/0
+publicly_accessible  = false   # true requires public subnets and IGW/NAT egress
+
+# --- OPTIONAL ---
+project_name = "soat-aurora"
+environment  = "dev"
+aws_region   = "us-east-1"
+
+# engine can be "aurora-mysql" or "aurora-postgresql"
+engine         = "aurora-mysql"
+engine_version = "" # leave empty to use AWS default
+
+database_name  = "appdb"
+master_username = "dbadmin"
+
+instance_count = 1
+min_capacity   = 0.5
+max_capacity   = 4
+
+backup_retention_days      = 7
+preferred_backup_window     = "07:00-09:00"
+preferred_maintenance_window = "sun:10:00-sun:12:00"
+
+deletion_protection = true
+apply_immediately   = false
+
+# Optional KMS key ID for storage encryption
+kms_key_id = ""
+
+# Extra tags
+tags = {
+  Owner = "platform-team"
+}
+
+

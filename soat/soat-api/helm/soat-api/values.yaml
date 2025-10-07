@@ -1,0 +1,348 @@
+# Default values for soat-api
+# This is a YAML-formatted file.
+
+# Global configuration
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+  nameOverride: ""
+  fullnameOverride: ""
+
+# Replica count
+replicaCount: 1
+
+# Image configuration
+image:
+  repository: soat-api
+  tag: "latest"
+  pullPolicy: Always
+  pullSecrets: []
+
+# Image pull secrets
+imagePullSecrets: []
+
+# Service account configuration
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Pod annotations
+podAnnotations: {}
+
+# Pod security context
+podSecurityContext:
+  fsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+
+# Container security context
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000
+  annotations: {}
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+  hosts:
+    - host: api.soat.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: soat-api-tls
+      hosts:
+        - api.soat.com
+
+# Resources configuration
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# Environment variables
+env: []
+
+# Node selector
+nodeSelector: {}
+
+# Affinity
+affinity: {}
+
+# Tolerations
+tolerations: []
+
+# Autoscaling configuration
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+# Pod disruption budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+# Network policy
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+
+# Database configuration
+database:
+  enabled: true
+  type: postgresql
+  host: postgres-service
+  port: 5432
+  name: fastfood_db
+  username: postgres
+  password: password
+  ssl: false
+
+# Mercado Pago configuration
+mercadoPago:
+  baseUrl: "https://api.mercadopago.com"
+  accessToken: "TEST-6844518034684807-080315-27eaad1382457fb80c37c5f5089a6dda-204801445"
+
+# Application configuration
+app:
+  nodeEnv: production
+  logLevel: info
+  apiBaseUrl: "https://api.soat.com"
+  jwtSecret: "soat-api-jwt-secret-key"
+  webhookSecret: "soat-webhook-secret-key"
+
+# Health checks
+healthChecks:
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 3000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 3000
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+# Monitoring configuration
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    path: /metrics
+  prometheusRule:
+    enabled: true
+    rules:
+      - alert: HighCPUUsage
+        expr: container_cpu_usage_seconds_total{container="soat-api"} > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "Container {{ $labels.container }} has high CPU usage"
+      
+      - alert: HighMemoryUsage
+        expr: container_memory_usage_bytes{container="soat-api"} > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "Container {{ $labels.container }} has high memory usage"
+      
+      - alert: PodDown
+        expr: up{container="soat-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Pod is down"
+          description: "Pod {{ $labels.pod }} is down"
+
+# Logging configuration
+logging:
+  enabled: true
+  fluentd:
+    enabled: true
+    config:
+      - name: fluentd-config
+        data:
+          fluent.conf: |
+            <source>
+              @type tail
+              path /var/log/containers/*.log
+              pos_file /var/log/fluentd-containers.log.pos
+              tag kubernetes.*
+              read_from_head true
+              <parse>
+                @type json
+                time_format %Y-%m-%dT%H:%M:%S.%NZ
+              </parse>
+            </source>
+            
+            <filter kubernetes.**>
+              @type kubernetes_metadata
+            </filter>
+            
+            <match kubernetes.**>
+              @type elasticsearch
+              host elasticsearch-master
+              port 9200
+              logstash_format true
+              logstash_prefix k8s
+              <buffer>
+                @type file
+                path /var/log/fluentd-buffers/kubernetes.system.buffer
+                flush_mode interval
+                retry_type exponential_backoff
+                flush_interval 5s
+                retry_forever false
+                retry_max_interval 30
+                chunk_limit_size 2M
+                queue_limit_length 8
+                overflow_action block
+              </buffer>
+            </match>
+
+# Backup configuration
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # 2 AM daily
+  retention: "30d"
+  storage:
+    type: "s3"
+    bucket: "soat-api-backups"
+    region: "us-east-1"
+
+# Environment-specific overrides
+environments:
+  dev:
+    enabled: false
+    replicas: 1
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    autoscaling:
+      minReplicas: 1
+      maxReplicas: 3
+    app:
+      nodeEnv: development
+      logLevel: debug
+      apiBaseUrl: "https://dev-api.soat.com"
+    ingress:
+      hosts:
+        - host: dev-api.soat.com
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: soat-api-dev-tls
+          hosts:
+            - dev-api.soat.com
+
+  staging:
+    enabled: false
+    replicas: 2
+    resources:
+      limits:
+        cpu: 400m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    autoscaling:
+      minReplicas: 2
+      maxReplicas: 5
+    app:
+      nodeEnv: staging
+      logLevel: info
+      apiBaseUrl: "https://staging-api.soat.com"
+    ingress:
+      hosts:
+        - host: staging-api.soat.com
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: soat-api-staging-tls
+          hosts:
+            - staging-api.soat.com
+
+  prod:
+    enabled: false
+    replicas: 5
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+    autoscaling:
+      minReplicas: 5
+      maxReplicas: 20
+    app:
+      nodeEnv: production
+      logLevel: warn
+      apiBaseUrl: "https://api.soat.com"
+    ingress:
+      hosts:
+        - host: api.soat.com
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: soat-api-prod-tls
+          hosts:
+            - api.soat.com
+      annotations:
+        nginx.ingress.kubernetes.io/cors-allow-origin: "https://soat.com"
+        nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+        nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization" 
